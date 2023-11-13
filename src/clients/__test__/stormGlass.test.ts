@@ -2,6 +2,7 @@ import { StormGlass } from "@src/clients/stormGlass";
 import axios from "axios";
 import stormGlassWeather3HoursFixture from "@test/fixtures/stormglass_weather_3_hours.json";
 import stormGlassNormalizedFixture from "@test/fixtures/stormglass_normalized_response_3_hours.json";
+
 jest.mock("axios");
 
 describe("StormGlass client", () => {
