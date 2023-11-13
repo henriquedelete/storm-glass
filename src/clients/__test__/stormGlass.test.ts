@@ -20,7 +20,7 @@ describe("StormGlass client", () => {
   });
 
   //---------------------------------------
-  it("should exclude incomplete data points", async () => {
+  it("should exclude incomplete data points || deve retirar pontos incompletos ", async () => {
     const lat = -33.792729;
     const lng = 121.289824;
 
@@ -44,7 +44,7 @@ describe("StormGlass client", () => {
   });
 
   //---------------------------------------
-  it("should get a generic error from StormGlass service when the request fail before reaching the service", async () => {
+  it("should get a generic error from StormGlass service when the request fail before reaching the service || deve receber um erro genérico do serviço StormGlass quando a solicitação falhar antes de chegar ao serviço", async () => {
     const lat = -33.792729;
     const lng = 121.289824;
 
@@ -58,7 +58,7 @@ describe("StormGlass client", () => {
   });
 
   //---------------------------------------
-  it("should get an StormGlassResponseError when the StormGlass service responds with error", async () => {
+  it("should get an StormGlassResponseError when the StormGlass service responds with error || deve receber um StormGlassResponseError quando o serviço StormGlass responder com erro", async () => {
     const lat = -33.792729;
     const lng = 121.289824;
 
@@ -74,7 +74,7 @@ describe("StormGlass client", () => {
     const stormGlass = new StormGlass(mockedAxios);
 
     expect(stormGlass.fetchPoints(lat, lng)).rejects.toThrow(
-      `Unexpected error returned by the StormGlass service: Error: {"errors":[Rate Limit reached"]} Code: 429`
+      `Unexpected error returned by the StormGlass service: Error: {"errors":["Rate Limit reached"]} Code: 429`
     );
   });
 });

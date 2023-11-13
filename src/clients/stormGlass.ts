@@ -65,15 +65,13 @@ export class StormGlass {
 
       return this.normalizeResponse(response.data);
     } catch (err: any) {
-      /**
-       * This is handling the Axios errors specifically
-       */
       if (err.response && err.response.status) {
         throw new StormGlassResponseError(
-          `Error: {"errors":[${err.response.data.errors}"]} Code: ${err.response.status}"`
+          `Error: ${JSON.stringify(err.response.data)} Code: ${
+            err.response.status
+          }`
         );
       }
-      // The type is temporary given we will rework it in the upcoming chapters
       throw new ClientRequestError(err.message);
     }
   }
