@@ -1,5 +1,5 @@
 import { InternalErrors } from "@src/util/errors/internal-errors";
-import { AxiosStatic } from "axios";
+import * as HTTPUtil from "@src/util/request";
 
 import config, { IConfig } from "config";
 
@@ -59,10 +59,9 @@ export class StormGlass {
 
   readonly stormGlassAPISource = "noaa";
 
-  constructor(protected request: AxiosStatic) {}
+  constructor(protected request = new HTTPUtil.Request()) {}
 
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
-    console.log(stormGlassResourceConfig);
     try {
       const response = await this.request.get<StormGlassForecastResponse>(
         `${stormGlassResourceConfig.get("apiUrl")}/weather/point?params=${
@@ -78,7 +77,7 @@ export class StormGlass {
       return this.normalizeResponse(response.data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      if (err.response && err.response.status) {
+      if (HTTPUtil.Request.isRequestError(err)) {
         throw new StormGlassResponseError(
           `Error: ${JSON.stringify(err.response.data)} Code: ${
             err.response.status
