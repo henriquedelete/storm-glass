@@ -1,6 +1,8 @@
 import { InternalErrors } from "@src/util/errors/internal-errors";
 import { AxiosStatic } from "axios";
 
+import config, { IConfig } from "config";
+
 export interface StormGlassPointSource {
   [key: string]: number;
 }
@@ -47,23 +49,34 @@ export class StormGlassResponseError extends InternalErrors {
   }
 }
 
+const stormGlassResourceConfig: IConfig = config.get(
+  "App.resources.StormGlass"
+);
+
 export class StormGlass {
   readonly stormGlassAPIParams =
     "swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed";
+
   readonly stormGlassAPISource = "noaa";
+
   constructor(protected request: AxiosStatic) {}
+
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
+    console.log(stormGlassResourceConfig);
     try {
       const response = await this.request.get<StormGlassForecastResponse>(
-        `https://api.stormglass.io/v2/weather/point?params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}&lat=${lat}&lng=${lng}`,
+        `${stormGlassResourceConfig.get("apiUrl")}/weather/point?params=${
+          this.stormGlassAPIParams
+        }&source=${this.stormGlassAPISource}&lat=${lat}&lng=${lng}`,
         {
           headers: {
-            Authorization: "fake-token",
+            Authorization: stormGlassResourceConfig.get("apiToken"),
           },
         }
       );
 
       return this.normalizeResponse(response.data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.response && err.response.status) {
         throw new StormGlassResponseError(
