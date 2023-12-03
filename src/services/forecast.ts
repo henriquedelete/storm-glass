@@ -15,6 +15,8 @@ export interface Beach {
   user: string;
 }
 
+export interface TimeForecast {}
+
 export interface BeachForecast extends Omit<Beach, "user">, ForecastPoint {}
 
 export class Forecast {
@@ -42,4 +44,6 @@ export class Forecast {
 
     return pointsWithCorrectSources;
   }
+
+  private mapForecastByTime(forecast: BeachForecast[]) {}
 }
